@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LocRoot>$(MSBuildThisFileDirectory)</LocRoot>
+    <LocConfigFile>$(LocRoot)\Settings\LocConfig.xml</LocConfigFile>
+    <IntermediateLocConfigFile>$(IntermediateOutputPath)LocConfig.xml</IntermediateLocConfigFile>
+    <TdBuildTeamIdsFile>$(LocRoot)\Settings\TdBuildTeamIds_$(TdBuildGitBranchId).xml</TdBuildTeamIdsFile>
+    <LocOutput>$(LocRoot)\obj\$(Platform)\$(Configuration)\$(LocModuleName)\LocOutput</LocOutput>
+    <LangMapFile>$(LocRoot)\Settings\LangMap.xml</LangMapFile>
+    <LocalizeBuildTimestamp>$(IntermediateOutputPath)LocalizeBuild.Timestamp</LocalizeBuildTimestamp>
+    <LocFileList>$(IntermediateOutputPath)LocFile.List</LocFileList>
+    <PowerShellRunSwitches>-ExecutionPolicy RemoteSigned -NonInteractive -NoProfile</PowerShellRunSwitches>
+  </PropertyGroup>
+  <!-- Inputs to enable incremental localization build -->
+  <ItemGroup>
+    <LocalizeBuildInputs Condition="'$(LocalizeResX)' == 'true'" Include="@(EmbeddedResource)" />
+    <LocalizeBuildInputs Condition="'$(LocalizeApp)' == 'true'" Include="@(PRIResource)" />
+    <LocalizeBuildInputs Condition="'$(LocalizeGeneric)' == 'true'" Include="@(LocContent)" />
+    <LocalizeBuildInputs Include="$(LocRoot)\*.*" />
+    <LocalizeBuildInputs Include="$(LocRoot)\Settings\*.*" />
+    <LocalizeBuildInputs Include="$(TdBuildClientPath)\**\*.*" />
+  </ItemGroup>
+  <!-- Extend the build process so that localization build can be run as a pre-build step -->
+  <PropertyGroup>
+    <BuildDependsOn Condition="('$(EnableLocalization)' == 'true') and (('$(LocalizeResX)' == 'true') or ('$(LocalizeApp)' == 'true') or ('$(LocalizeGeneric)' == 'true'))">
+      LocalizeBuild;
+      AfterLocalize;
+      $(BuildDependsOn);
+    </BuildDependsOn>
+  </PropertyGroup>
+  <Target Name="CheckForLocalizeBuild">
+    <Error Condition="!Exists('$(TdBuildClientPath)')" Text="'TdBuildClientPath' not found." />
+    <Error Condition="'$(LocModuleName)' == ''" Text="'LocModuleName' property unspecified." />
+    <Error Condition="'$(TdBuildGitBranchId)' == ''" Text="'TdBuildGitBranchId' property unspecified." />
+  </Target>
+  <!-- Run localization build by interacting with the Touchdown Build service -->
+  <Target Name="LocalizeBuild" DependsOnTargets="CheckForLocalizeBuild" Inputs="@(LocalizeBuildInputs)" Outputs="$(LocalizeBuildTimestamp)">
+    <Copy SourceFiles="$(LocConfigFile)" DestinationFolder="$(IntermediateOutputPath)" />
+    <XmlPeek XmlInputPath="$(TdBuildTeamIdsFile)" Query="/Modules/Module">
+      <Output TaskParameter="Result" ItemName="LocModule" />
+    </XmlPeek>
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="UpdateLocConfigFile" Properties="LocModuleXml=%(LocModule.Identity)" />
+    <PropertyGroup>
+      <LocalizeBuildCommand>set LocRoot=$(LocRoot)&amp;&quot;$(TdBuildClientPath)\TdBuildClient.exe&quot; /c:&quot;$(IntermediateLocConfigFile)&quot; /o:&quot;$(LocOutput)&quot; /mid:&quot;$(LocModuleName)&quot; /lct</LocalizeBuildCommand>
+      <LocalizeBuildCommand Condition="'$(EnableLangMap)' == 'true'">$(LocalizeBuildCommand) /langmap:&quot;$(LangMapFile)&quot;</LocalizeBuildCommand>
+    </PropertyGroup>
+    <Exec Command="$(LocalizeBuildCommand)" />
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="PostProcessLocFiles" />
+    <WriteLinesToFile File="$(LocalizeBuildTimestamp)" Lines="Localization build completed." Overwrite="true" />
+  </Target>
+  <!-- Inject Touchdown Build team IDs into the loc config file -->
+  <Target Name="UpdateLocConfigFile">
+    <XmlPeek XmlContent="$(LocModuleXml)" Query="/Module/@name">
+      <Output TaskParameter="Result" ItemName="ModuleName" />
+    </XmlPeek>
+    <XmlPeek XmlContent="$(LocModuleXml)" Query="/Module/@tdbuildteamid">
+      <Output TaskParameter="Result" ItemName="TdBuildTeamId" />
+    </XmlPeek>
+    <PropertyGroup>
+      <TdBuildTeamIdPokeQuery>/Modules/Module[@name='@(ModuleName)']/@tdbuildteamid</TdBuildTeamIdPokeQuery>
+    </PropertyGroup>
+    <XmlPoke XmlInputPath="$(IntermediateLocConfigFile)" Query="$(TdBuildTeamIdPokeQuery)" Value="@(TdBuildTeamId)" />
+  </Target>
+  <!-- Post-process localized resource files resulted from Touchdown build -->
+  <Target Name="PostProcessLocFiles">
+    <Exec Condition="'$(LocalizeResx)' == 'true'" Command="set LocRoot=$(LocRoot)&amp;powershell $(PowerShellRunSwitches) -File &quot;$(LocRoot)\PostProcessLocFiles.ps1&quot; &quot;$(IntermediateLocConfigFile)&quot; &quot;$(LocOutput)&quot; &quot;$(LocModuleName)&quot; &quot;$(LocFileList)&quot; LocalizeResx" />
+    <Exec Condition="'$(LocalizeApp)' == 'true'" Command="set LocRoot=$(LocRoot)&amp;powershell $(PowerShellRunSwitches) -File &quot;$(LocRoot)\PostProcessLocFiles.ps1&quot; &quot;$(IntermediateLocConfigFile)&quot; &quot;$(LocOutput)&quot; &quot;$(LocModuleName)&quot; &quot;$(LocFileList)&quot; LocalizeApp" />
+  </Target>
+  <!-- Further-process localized resource files to make ResGen & AL or MakePri work with those files -->
+  <Target Name="AfterLocalize">
+    <ReadLinesFromFile Condition="'$(LocalizeResx)' == 'true'" File="$(LocFileList)">
+      <Output TaskParameter="Lines" ItemName="EmbeddedResource"/>
+    </ReadLinesFromFile>
+    <ReadLinesFromFile Condition="'$(LocalizeApp)' == 'true'" File="$(LocFileList)">
+      <Output TaskParameter="Lines" ItemName="PRIResource"/>
+    </ReadLinesFromFile>
+  </Target>
+  <PropertyGroup>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      LocalizeClean;
+    </CleanDependsOn>
+  </PropertyGroup>
+  <!-- Clean up outputs from localization build -->
+  <Target Name="LocalizeClean">
+    <ReadLinesFromFile Condition="('$(LocalizeResX)' == 'true') or ('$(LocalizeApp)' == 'true')" File="$(LocFileList)">
+      <Output TaskParameter="Lines" ItemName="LocFilesToDelete"/>
+    </ReadLinesFromFile>
+    <ItemGroup>
+      <LocFilesToDelete Include="$(LocalizeBuildTimestamp)" />
+    </ItemGroup>
+    <Delete Files="@(LocFilesToDelete)" />
+  </Target>
+</Project>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Modules>
+    <Module 
+      name="IotCoreDefaultApp" 
+      tdbuildteamid=""> 
+      <File 
+        location="IotCoreDefaultApp"
+        binplace_en-us="true"
+        path="%LocRoot%\..\IoTCoreDefaultApp\IoTCoreDefaultApp\Strings\en-US\Resources.resw" />
+    </Module>
+</Modules>

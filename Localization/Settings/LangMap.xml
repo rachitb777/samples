@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- "build" is for culture code in the build system, whereas "loc" is for culture code in the localization system. If no entry, it is assumed that the same culture code is used in both systems and culture code conversion is not performed. -->
+<CultureMap>
+  <Culture build="ko" loc="ko-kr" />
+  <Culture build="zh-hans" loc="zh-cn" />
+</CultureMap>

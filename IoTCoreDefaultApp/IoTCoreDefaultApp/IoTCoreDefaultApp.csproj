@@ -302,4 +302,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <!-- Enable localization build for VSTS build -->
+  <!-- Enable localization build for VSTS build -->
+  <PropertyGroup>
+    <LocalizeResX>true</LocalizeResX>
+    <LocModuleName>IotCoreDefaultApp</LocModuleName>
+  </PropertyGroup>
+  <Import Project="..\..\Localization\Localization.targets" Condition="'$(BUILD_DEFINITIONNAME)' != ''" />
 </Project>
