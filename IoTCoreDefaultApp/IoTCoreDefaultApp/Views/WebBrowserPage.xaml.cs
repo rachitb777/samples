@@ -45,8 +45,7 @@ namespace IoTCoreDefaultApp
             //Initialize
             WebBackButton.IsEnabled = ContentView.CanGoBack;
             WebNextButton.IsEnabled = ContentView.CanGoForward;
-
-            WebAddressText.PlaceholderText = Common.GetLocalizedText("WebAddressPlaceholderText");
+            
             WebAddressText.AutoMaximizeSuggestionArea = true;
 
             WebAddressText.QueryIcon.HorizontalAlignment = HorizontalAlignment.Left;
@@ -309,7 +308,7 @@ namespace IoTCoreDefaultApp
                 //Do Some action if Failure
                 //Check if need Wifi Connection
                 //TODO: Do action on Redirect behavior
-                DisplayMessage(Common.GetLocalizedText("NetworkNotConnected"), Common.GetLocalizedText("NetworkNotConnected2"), true);
+                DisplayMessage(Common.GetResourceText("NetworkNotConnected"), Common.GetResourceText("NetworkNotConnected2"), true);
                 InProgress = false;
             }
         }
@@ -377,7 +376,7 @@ namespace IoTCoreDefaultApp
                     ContentView.Navigate(new Uri(Constants.WODUrl));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //DisplayMessage("Error: " + e.Message);
                 //Direct to bing.com

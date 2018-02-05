@@ -32,133 +32,6 @@
     NavigationCacheMode="Disabled"
     x:Name="rootPage">
     <Page.Resources>
-        <local:WifiGlyphConverter x:Key="GlyphConverter"/>
-        <DataTemplate x:Name="WifiInitialState">
-            <Grid Height="44">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Background="{StaticResource AccentBrush}" Grid.Row="0" Grid.Column="0" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Grid.Column="0" Text="{Binding SignalBars, Mode=OneWay, Converter={StaticResource GlyphConverter}}" FontSize="18" FontFamily="{StaticResource IconFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Border>
-                <TextBlock Grid.Column="1" Text="{Binding Ssid}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}" Margin="5,0,0,0"/>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Name="WifiConnectedState">
-            <Grid Height="44">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Background="{StaticResource AccentBrush}" Grid.Row="0" Grid.Column="0" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Grid.Column="0" Text="{Binding SignalBars, Mode=OneWay, Converter={StaticResource GlyphConverter}}" FontSize="18" FontFamily="{StaticResource IconFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Border>
-                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0">
-                    <TextBlock Text="{Binding Ssid}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}"/>
-                    <TextBlock Text="{Binding  ElementName='rootPage', Path=DataContext[NetworkConnectedText]}" Style="{StaticResource BodyTextBlockStyle}" Foreground="{StaticResource PaleTextBrush}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Name="WifiConnectState">
-            <Grid Height="144">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="44"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="26"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Border Width="32" Height="32" VerticalAlignment="Center">
-                        <TextBlock Grid.Column="0" Text="{Binding SignalBars, Mode=OneWay, Converter={StaticResource GlyphConverter}}" FontSize="18" FontFamily="{StaticResource IconFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Border>
-                    <TextBlock Text="{Binding Ssid}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}" Margin="5,0,0,0"/>
-                </StackPanel>
-                <CheckBox Grid.Row="1" x:Name="ConnectAutomaticallyCheckBox" IsChecked="True" HorizontalAlignment="Left" Margin="45,0,0,0" Height="32" Checked="ConnectAutomaticallyCheckBox_Changed" Unchecked="ConnectAutomaticallyCheckBox_Changed" Style="{StaticResource IoTCoreDefaultAppCheckBoxStyle}">
-                    <TextBlock Text="{Binding ElementName='rootPage', Path=DataContext[ConnectAutomaticallyText]}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}"/>
-                </CheckBox>
-                <Button Grid.Row="3" Content="{Binding ElementName='rootPage', Path=DataContext[ConnectButtonContent]}" x:Name="ConnectButton" Width="120" Height="32" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="ConnectButton_Clicked" Margin="102,0,0,0"/>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Name="WifiConnectedMoreOptions">
-            <Grid Height="100">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="44"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Border Width="32" Height="32" VerticalAlignment="Center">
-                        <TextBlock Grid.Column="0" Text="{Binding SignalBars, Mode=OneWay, Converter={StaticResource GlyphConverter}}" FontSize="18" FontFamily="{StaticResource IconFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Border>
-                    <TextBlock Text="{Binding Ssid}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}" Margin="5,0,0,0"/>
-                </StackPanel>
-                <Button Grid.Row="1" Content="{Binding ElementName='rootPage', Path=DataContext[DisconnectButtonContent]}" x:Name="DisconnectButton" Width="120" Height="32" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="DisconnectButton_Clicked" Margin="102,0,0,0"/>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Name="WifiPasswordState">
-            <Grid Height="204">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="44"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="8"/>
-                </Grid.RowDefinitions>
-                <Border Grid.Row="0" Grid.Column="0" Width="32" Height="32" VerticalAlignment="Center">
-                    <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding SignalBars, Mode=OneWay, Converter={StaticResource GlyphConverter}}" FontSize="18" FontFamily="{StaticResource IconFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Border>
-                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Ssid}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}" Margin="5,0,0,0"/>
-                <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch">
-                    <TextBlock Text="{Binding ElementName='rootPage', Path=DataContext[NetworkPasswordPromptText]}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}"/>
-                    <PasswordBox x:Name="WifiPasswordBox" PasswordChanged="WifiPasswordBox_PasswordChanged" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="334" Margin="0,8,0,0" Loaded="WifiPasswordBox_Loaded"/>
-                </StackPanel>
-                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="130,0,0,0">
-                    <Button Content="{Binding ElementName='rootPage', Path=DataContext[NextButtonContent]}" x:Name="NextButton" Width="120" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="NextButton_Clicked" Height="32"/>
-                    <Button Content="{Binding ElementName='rootPage', Path=DataContext[CancelButtonContent]}" x:Name="CancelButton" Width="120" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="CancelButton_Clicked" Margin="12,0,0,0" Height="32"/>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Name="WifiConnectingState">
-            <Grid Height="138">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="44"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="26"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="8"/>
-                </Grid.RowDefinitions>
-                <Border Grid.Row="0" Grid.Column="0" Width="32" Height="32" VerticalAlignment="Center">
-                    <TextBlock Grid.Column="0" Text="{Binding SignalBars, Mode=OneWay, Converter={StaticResource GlyphConverter}}" FontSize="18" FontFamily="{StaticResource IconFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Border>
-                <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Ssid}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}" Margin="5,0,0,0"/>
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                    <ProgressRing x:Name="ConnectingProgressRing" IsActive="True" Foreground="White"/>
-                    <TextBlock Text="{Binding ElementName='rootPage', Path=DataContext[NetworkConnectingMessageText]}" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource BodyTextBlockStyle}" Margin="12,0,0,0"/>
-                </StackPanel>
-                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="CancelButton" Content="Cancel" Width="120" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="CancelButton_Clicked" Margin="130,0,0,0"/>
-            </Grid>
-        </DataTemplate>
-
-
         <DataTemplate x:Key="BluetoothDevicesListViewTemplate">
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
@@ -233,7 +106,35 @@
                 <TextBlock x:Name="CortanaListViewItem" Text="{Binding [CortanaPreferencesText]}" />
             </ListViewItem>
         </ListView>
-
+        
+        <Grid x:Name="PopupOutput">
+            <Popup x:Name="StandardPopup" MaxHeight="400" MaxWidth="120"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" FlowDirection="LeftToRight" UseLayoutRounding="True" IsLightDismissEnabled="True" LightDismissOverlayMode="Auto">
+            <Popup.ChildTransitions>
+                <TransitionCollection>
+                    <PaneThemeTransition />
+                </TransitionCollection>
+            </Popup.ChildTransitions>
+            <Border BorderBrush="{StaticResource ApplicationForegroundThemeBrush}" 
+                                Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                                BorderThickness="2" >
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="PopupStack"  Height="120" Width="400" Margin="5,5,10,10">
+                        <RichTextBlock FontWeight="Normal" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="5,5,10,10"  IsTextSelectionEnabled="True">
+                            <Paragraph>
+                                <Run x:Name="PopupText1" Text="{Binding [LanguagePopupText1] }" />
+                                <Run x:Name="PopupText2" FontWeight="Bold" FontStyle="Italic" TextDecorations="Underline"/>
+                                <Run x:Name="PopupText3" Text="{Binding [LanguagePopupText3] }"/>
+                            </Paragraph>
+                        </RichTextBlock>
+                        <RelativePanel HorizontalAlignment="Center" VerticalAlignment="Bottom" >
+                            <Button x:Name="PopupYes" Click="PopupYes_Clicked" HorizontalAlignment="Left" Margin="0 0 5 0"/>
+                            <Button x:Name="PopupNo"  Click="PopupNo_Clicked" HorizontalAlignment="Right" RelativePanel.RightOf="PopupYes" RelativePanel.AlignTopWith="PopupYes"/>
+                        </RelativePanel>
+                    </StackPanel>
+                </Border>
+            </Popup>
+        </Grid>
+        
         <ScrollViewer x:Name="BasicPreferencesGridView" Grid.Column="2" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -247,52 +148,38 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="30"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="408"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <ToggleSwitch Grid.Column="1" Grid.Row="1" Style="{StaticResource IoTCoreDefaultAppToggleStyle}" Toggled="Screensaver_Toggled" x:Name="screensaverToggleSwitch" OnContent="{Binding [ToggleOnText]}" OffContent="{Binding [ToggleOffText]}">
+
+                
+                <ToggleSwitch Grid.Column="1" Grid.Row="1" Style="{StaticResource IoTCoreDefaultAppToggleStyle}" Toggled="Screensaver_Toggled" x:Name="screensaverToggleSwitch" 
+                              OnContent="{Binding [ToggleOnText]}" OffContent="{Binding [ToggleOffText]}">
                     <ToggleSwitch.Header>
                         <TextBlock Text="{Binding [EnableScreensaverText]}" Style="{StaticResource SubtitleTextBlockStyle}" FontWeight="Normal" />
                     </ToggleSwitch.Header>
                 </ToggleSwitch>
                 <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding [LanguageTitleText]}" Style="{StaticResource SubtitleTextBlockStyle}" FontWeight="Normal" />
-                <ComboBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" x:Name="LanguageComboBox" FontSize="16" Margin="0,10,0,0" Width="446" SelectionChanged="LanguageComboBox_SelectionChanged" />
-                <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding [KeyboardTitleText]}" Style="{StaticResource SubtitleTextBlockStyle}" FontWeight="Normal" />
-                <ComboBox Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" x:Name="InputLanguageComboBox" FontSize="16" Margin="0,10,0,0" Width="446" SelectionChanged="InputLanguageComboBox_SelectionChanged"/>
+                <ComboBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" x:Name="LanguageComboBox" FontSize="16" Margin="0,10,0,0" Width="446" SelectionChanged="LanguageComboBox_SelectionChanged" Loaded="LanguageComboBox_Loaded" />
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="5" Margin="2,0,10,10">
+                    <TextBlock x:Name="SpeechSupport" ></TextBlock>
+                    <StackPanel x:Name="LangApplyStack" Visibility="Collapsed" HorizontalAlignment="Center">
+                           <Button x:Name="LangApplyYes" Content="{Binding [LanguageApplyButtonText]}" Margin="0,0,20,10" Click="LangApplyYes_Click" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock Grid.Column="1" Grid.Row="7" Text="{Binding [KeyboardTitleText]}" Style="{StaticResource SubtitleTextBlockStyle}" FontWeight="Normal" />
+                <ComboBox Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left" x:Name="InputLanguageComboBox" FontSize="16" Margin="0,10,0,0" Width="446" SelectionChanged="InputLanguageComboBox_SelectionChanged"/>
+            
             </Grid>
         </ScrollViewer>
 
-        <ScrollViewer  x:Name="NetworkGrid" Grid.Column="2" Grid.Row="1">
-            <StackPanel Margin="24,25,0,0" Orientation="Vertical">
-                <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <TextBlock Text="{Binding [DirectConnectionsText]}" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,12"/>
-                        <TextBlock Text="{Binding [NoNetworksText]}" x:Name="NoneFoundText" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed"/>
-                        <StackPanel x:Name="DirectConnectionStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <Border Width="44" Height="44">
-                                <TextBlock Text="{StaticResource ResourceKey=IconEthernet}" FontSize="24" FontFamily="{StaticResource IconFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="{Binding [EthernetText]}" Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <Grid Margin="0,21,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding [WifiText]}" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,12,0,12"/>
-                            <Button Grid.Column="2" x:Name="RefreshButton" Content="{Binding [RefreshContent]}" Click="RefreshButton_Click" />
-                        </Grid>
-                        <ListView x:Name="WifiListView" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Single" Width="446" ItemTemplate="{StaticResource WifiInitialState}" SelectionChanged="WifiListView_SelectionChanged" ItemContainerStyle="{StaticResource WifiListViewItemStyle}"/>
-                        <TextBlock Text="{Binding [NoNetworksText]}" x:Name="NoWifiFoundText" Width="446" Style="{StaticResource BodyTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed"  Margin="10,0,0,0"/>
-                    </StackPanel>
-                </ScrollViewer>
-            </StackPanel>
+        <ScrollViewer x:Name="NetworkGrid" Grid.Column="2" Grid.Row="1" >
+            <local:NetworkListControl x:Name="NetworkControl" Grid.Column="2" Grid.Row="1" />
         </ScrollViewer>
 
         <ScrollViewer  x:Name="BluetoothGrid" Grid.Column="2" Grid.Row="1" >
@@ -306,9 +193,9 @@
                             <TextBlock x:Uid="BluetoothDevices" Text="{Binding [BluetoothManageDevicesText]}"  Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Height="64" VerticalAlignment="Bottom" Margin="24,0,0,0">
-                            <ToggleSwitch x:Name="BluetoothToggle" Header="{Binding [BluetoothToggleLabel]}" Style="{StaticResource IoTCoreDefaultAppToggleStyle}"  Toggled="BluetoothToggle_Toggled" IsEnabled="True" OnContent="{Binding [ToggleOnText]}" OffContent="{Binding [ToggleOffText]}" />
+                            <ToggleSwitch x:Name="BluetoothToggle" Header="{Binding [BluetoothWatcherToggleLabel]}" Style="{StaticResource IoTCoreDefaultAppToggleStyle}"  Toggled="BluetoothToggle_Toggled" IsEnabled="True" OnContent="{Binding [ToggleOnText]}" OffContent="{Binding [ToggleOffText]}" />
                         </StackPanel>
-                        <StackPanel x:Name="confirmationPanel"  Orientation="Horizontal"  Height="88" HorizontalAlignment="Stretch"  Margin="24,0,0,0">
+                        <StackPanel x:Name="confirmationPanel"  Orientation="Horizontal" HorizontalAlignment="Stretch"  Margin="24,0,0,0">
                             <RelativePanel>
                                 <TextBlock x:Name="confirmationText" Width="380" TextAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,2" Text="" TextWrapping="WrapWholeWords" RelativePanel.AlignLeftWithPanel="True" />
                                 <Button x:Name="yesButton" Margin="0,0,5,10" Click="YesButton_Click" Width="44" RelativePanel.RightOf="confirmationText" >Yes</Button>
@@ -316,6 +203,8 @@
                             </RelativePanel>
                         </StackPanel>
 
+                        <ProgressBar x:Name="StackLoading" IsIndeterminate="True" Height="20" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,0,0,0"/>
+                       
                         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,15,0" >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <ListView x:Name="bluetoothDeviceListView"
