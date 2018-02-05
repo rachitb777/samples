@@ -782,4 +782,8 @@ Vous pouvez également cliquer ou appuyer sur le bouton ci-dessous pour entrer l
     <value>Windows 10 IoT Standard</value>
     <comment>Dont Localize</comment>
   </data>
+  <data name="BluetoothOutboundLabel" xml:space="preserve">
+    <value>Outbound Pairing:</value>
+    <comment>Label that shows outbound pairing status</comment>
+  </data>
 </root>
