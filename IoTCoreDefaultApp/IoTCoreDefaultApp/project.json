@@ -1,10 +1,10 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.6",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Microsoft.WDG.Localization.Touchdown.Build.Client": "1.0.4"
   },
   "frameworks": {
-    "uap10.0.15063": {}
+    "uap10.0": {}
   },
   "runtimes": {
     "win10-arm": {},
